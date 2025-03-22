@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024 Your Name
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 `default_nettype none
 
 module tt_um_benoitlx (
@@ -11,46 +16,12 @@ module tt_um_benoitlx (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-    
-    // Module arguments
-    wire  [3:0] a = ui_in[3:0];
-    wire  [3:0] b = ui_in[7:4];
+  // All output pins must be assigned. If not used, assign to 0.
+  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+  assign uio_out = 0;
+  assign uio_oe  = 0;
 
-    assign uio_oe  = 8'b0;
-    wire  [1:0] op = uio_in[1:0];
+  // List all unused inputs to prevent warnings
+  wire _unused = &{ena, clk, rst_n, 1'b0};
 
-    reg  [7:0] o;
-
-    assign uo_out = o;
-
-    
-    // Enums
-    localparam Operation$Addition = 0;
-    localparam Operation$Substraction = 1;
-    localparam Operation$And = 2;
-    localparam Operation$Or = 3;
-    
-    // Update code
-    always @(*) begin
-        case (op)
-            Operation$Addition:
-                begin
-                    o = a + b;
-                end
-            Operation$Substraction:
-                begin
-                    o = a - b;
-                end
-            Operation$And:
-                begin
-                    o = a & b;
-                end
-            Operation$Or:
-                begin
-                    o = a | b;
-                end
-        endcase
-    end
-    
-endmodule // top
-
+endmodule
